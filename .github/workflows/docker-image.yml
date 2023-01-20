@@ -31,17 +31,19 @@ jobs:
       env:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-        NEW_VERSION: ${{steps.version.outputs.version}}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        echo $NEW_VERSION
 
-    # - name: Build the Docker image
-    #   run: |
-    #     docker build -t pblgllgs/graphql-actions:0.0.3 .
-    #     docker build -t pblgllgs/graphql-actions .
+    - name: Build the Docker image
+      env:
+        NEW_VERSION: ${{steps.version.outputs.version}}
+      run: |
+        docker build -t pblgllgs/graphql-actions:$NEW_VERSION .
+        docker build -t pblgllgs/graphql-actions:latest .
 
-    # - name: Push the Docker image
-    #   run: |
-    #     docker push pblgllgs/graphql-actions:0.0.3
-    #     docker push pblgllgs/graphql-actions
+    - name: Push the Docker image
+      env:
+        NEW_VERSION: ${{steps.version.outputs.version}}
+      run: |
+        docker push pblgllgs/graphql-actions:$NEW_VERSION
+        docker push pblgllgs/graphql-actions:latest
