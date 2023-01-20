@@ -27,8 +27,10 @@ jobs:
 
     - name: Build the Docker image
       run: |
-        docker build -t pblgllgs/graphql-actions:0.0.2 .
+        docker build -t pblgllgs/graphql-actions:0.0.3 .
+        docker build -t pblgllgs/graphql-actions .
 
     - name: Push the Docker image
       run: |
-        docker push pblgllgs/graphql-actions:0.0.2
+        docker push pblgllgs/graphql-actions:0.0.3
+        docker push pblgllgs/graphql-actions
