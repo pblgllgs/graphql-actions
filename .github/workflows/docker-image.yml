@@ -13,24 +13,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
     - name: Checkout code
       uses: actions/checkout@v3
       with:
         fetch-depth: 0
+    
+    - name: Application Version
+      uses: paulhatch/semantic-version@v4.0.3
+      with:
+        mayor:pattern: "mayor:"
+        minor:pattern: "feat:"
+        format: "${major}.${minor}.${patch}-prerelease${increment}"
+      id: version
 
     - name: Docker login
       env:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        NEW_VERSION: ${{steps.version.outputs.version}}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        echo $NEW_VERSION
 
-    - name: Build the Docker image
-      run: |
-        docker build -t pblgllgs/graphql-actions:0.0.3 .
-        docker build -t pblgllgs/graphql-actions .
+    # - name: Build the Docker image
+    #   run: |
+    #     docker build -t pblgllgs/graphql-actions:0.0.3 .
+    #     docker build -t pblgllgs/graphql-actions .
 
-    - name: Push the Docker image
-      run: |
-        docker push pblgllgs/graphql-actions:0.0.3
-        docker push pblgllgs/graphql-actions
+    # - name: Push the Docker image
+    #   run: |
+    #     docker push pblgllgs/graphql-actions:0.0.3
+    #     docker push pblgllgs/graphql-actions
